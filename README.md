@@ -44,12 +44,11 @@ ai-tiku-desktop/
 
 ## 快速开始
 
-### 1. 安装桌面端
-- **Linux (Debian / Ubuntu)**：前往仓库 **Actions → Artifacts** 下载 `.deb` 安装包（或本地编译后使用）：
-  ```bash
-  sudo dpkg -i AI题库控制台_0.1.0_amd64.deb
-  ```
-- **Windows**：前往仓库 **Actions → Artifacts** 下载 `ai-tiku-windows-installer` 中的 `.exe` 或 `.msi` 安装包安装。
+### 1. 安装桌面端（Linux）
+前往仓库右侧 **[Releases](https://github.com/xukuncai-hub/ai-tiku-desktop/releases)** 下载最新 `.deb` 安装包：
+```bash
+sudo dpkg -i ai-tiku-console_0.1.0_amd64.deb
+```
 
 ### 2. 准备运行环境
 1. 安装 Python 包管理器 **[uv](https://docs.astral.sh/uv/)**（用于自动管理 `ai-server` 虚拟环境与依赖）。
