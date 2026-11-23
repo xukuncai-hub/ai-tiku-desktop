@@ -15,7 +15,7 @@ jobs:
             bundles: deb
             name: linux-deb
           - os: windows-latest
-            bundles: nsis,msi
+            bundles: nsis
             name: windows-installer
 
     runs-on: ${{ matrix.os }}
