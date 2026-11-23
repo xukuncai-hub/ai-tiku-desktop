@@ -1,0 +1,22 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.template
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Build artifacts and runtime data
+build/
+dist/
+*.egg-info/
+.runtime/
+log/
+*.log
+
+# Editor settings
+.vscode/

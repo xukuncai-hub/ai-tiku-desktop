@@ -1,0 +1,26 @@
+# 密钥与个人数据（严禁上传）
+.env
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+*.csv
+*.log
+
+# Python 环境与缓存
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Rust / Tauri 构建产物
+desktop/src-tauri/target/
+*.deb
+*.AppImage
+*.exe
+*.msi
+
+# 仅保留仓库必需结构
+!.env.template
+!desktop/src-tauri/icons/*

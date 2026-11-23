@@ -1,0 +1,17 @@
+[project]
+name = "ocsllmanswerer"
+version = "0.1.0"
+description = "OCS 网课助手的 AI 题库服务"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask",
+    "openai>=1.68.0",
+    "python-dotenv",
+    "colorama",
+    "socksio>=1.0.0",
+    "waitress>=3.0.2",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.27,<1"]

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=启动 AI 题库
+Comment=启动本地题库服务（tikuAdapter 8060 + AI 5000）
+Exec=/home/song/桌面/AI刷题/启动.sh
+Icon=network-server
+Terminal=false
+Categories=Utility;

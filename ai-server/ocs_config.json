@@ -1,0 +1,19 @@
+[
+    {
+        "name": "AI题库",
+        "homepage": "http://localhost:5000",
+        "url": "http://localhost:5000/search",
+        "method": "post",
+        "type": "GM_xmlhttpRequest",
+        "contentType": "json",
+        "data": {
+            "title": "${title}",
+            "options": "${options}",
+            "type": "${type}",
+            "images": "${images}",
+            "suggestion_title": "${suggestion_title}",
+            "suggestion_options": "${suggestion_options}"
+        },
+        "handler": "return (res) => res.code === 1 ? [res.question, res.answer, {ai: res.analysis}] : [res.msg || '题库查询失败', undefined]"
+    }
+]

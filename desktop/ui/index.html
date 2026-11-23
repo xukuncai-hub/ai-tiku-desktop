@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 题库控制台</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 侧边导航栏 -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="5.5 12.5 10 17 18.5 7.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">AI 题库控制台</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="dashboard">
+          <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>服务总控台</span>
+        </button>
+        <button class="nav-btn" data-tab="history">
+          <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>作答与错题</span>
+          <span class="nav-badge hidden" id="badge-errors">0</span>
+        </button>
+        <button class="nav-btn" data-tab="settings">
+          <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>模型与配置</span>
+        </button>
+        <button class="nav-btn" data-tab="ocs">
+          <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span>OCS 接入</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-card">
+          <div class="status-row">
+            <span class="dot" id="dot-ai"></span>
+            <span class="status-name">AI 服务</span>
+            <span class="status-port">:5000</span>
+          </div>
+          <div class="status-row">
+            <span class="dot" id="dot-tiku"></span>
+            <span class="status-name">tikuAdapter</span>
+            <span class="status-port">:8060</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-block" id="btn-theme">
+          <span id="theme-label">切换浅色主题</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="content">
+      <!-- 1. 总控台 -->
+      <section class="tab-panel active" id="tab-dashboard">
+        <header class="panel-header">
+          <div>
+            <h1>服务总控台</h1>
+            <p class="muted" id="project-root-label">正在检测项目路径...</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" id="btn-start">启动服务</button>
+            <button class="btn btn-danger" id="btn-stop">停止服务</button>
+            <button class="btn btn-ghost" id="btn-restart">重启生效</button>
+            <button class="btn btn-ghost" id="btn-clear-cache">清空缓存</button>
+          </div>
+        </header>
+
+        <div class="cards">
+          <div class="card kpi">
+            <div class="kpi-top">
+              <div class="icon-badge badge-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
+              </div>
+              <div class="card-label">AI 服务 (5000)</div>
+            </div>
+            <div class="card-value" id="status-ai-text">检测中</div>
+            <div class="card-sub" id="status-ai-sub">本地 Flask 答题服务</div>
+          </div>
+
+          <div class="card kpi">
+            <div class="kpi-top">
+              <div class="icon-badge badge-violet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <div class="card-label">tikuAdapter (8060)</div>
+            </div>
+            <div class="card-value" id="status-tiku-text">检测中</div>
+            <div class="card-sub">上游免费题库源</div>
+          </div>
+
+          <div class="card kpi">
+            <div class="kpi-top">
+              <div class="icon-badge badge-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <div class="card-label">自动共享缓存</div>
+            </div>
+            <div class="card-value" id="stat-bank">-</div>
+            <div class="card-sub">多号同题抗乱序秒中</div>
+          </div>
+
+          <div class="card kpi">
+            <div class="kpi-top">
+              <div class="icon-badge badge-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div class="card-label">累计作答 / 成功率</div>
+            </div>
+            <div class="card-value" id="stat-history">-</div>
+            <div class="card-sub" id="stat-save-rate">缓存免付费占比 -</div>
+          </div>
+        </div>
+
+        <!-- 实时成本监控 -->
+        <div class="card cost-bar">
+          <div class="cost-metrics">
+            <div class="cost-item">
+              <span class="cost-label">DeepSeek 真实余额</span>
+              <b class="cost-val" id="api-balance">查询中...</b>
+              <span class="muted" id="api-balance-sub">官方 API 实时余额</span>
+            </div>
+            <div class="cost-item">
+              <span class="cost-label">今日预估费用</span>
+              <b class="cost-val" id="cost-today">¥0.0000</b>
+              <span class="muted" id="cost-today-tok">0 tokens</span>
+            </div>
+            <div class="cost-item">
+              <span class="cost-label">累计总费用</span>
+              <b class="cost-val" id="cost-total">¥0.0000</b>
+              <span class="muted" id="cost-calls">0 次调用</span>
+            </div>
+            <div class="cost-item">
+              <span class="cost-label">累计 Token (输入 / 输出)</span>
+              <b class="cost-val" id="cost-tokens">0 / 0</b>
+              <span class="muted" id="cost-avg">均价 - / 次</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-sm btn-ghost" id="btn-refresh-balance">刷新余额</button>
+            <button class="btn btn-sm btn-ghost" id="btn-reset-cost">重置统计</button>
+          </div>
+        </div>
+
+        <!-- 命中来源分布条 -->
+        <div class="card breakdown-card">
+          <div class="breakdown-head">
+            <span class="section-title">作答来源分布</span>
+            <div class="legend">
+              <span><i class="lg-dot c-local"></i>本地题库 <b id="cnt-local">0</b></span>
+              <span><i class="lg-dot c-cache"></i>答案缓存 <b id="cnt-cache">0</b></span>
+              <span><i class="lg-dot c-bank"></i>题库复核 <b id="cnt-bank">0</b></span>
+              <span><i class="lg-dot c-ai"></i>模型作答 <b id="cnt-ai">0</b></span>
+              <span><i class="lg-dot c-err"></i>失败 <b id="cnt-err">0</b></span>
+            </div>
+          </div>
+          <div class="progress-track" id="breakdown-bar"></div>
+        </div>
+
+        <!-- 实时日志终端 -->
+        <div class="log-box">
+          <div class="log-header">
+            <div class="log-tabs">
+              <button class="chip active" data-log="ai">AI 服务日志</button>
+              <button class="chip" data-log="tiku">题库适配器日志</button>
+            </div>
+            <div class="log-controls">
+              <input type="text" class="input input-sm" id="log-filter" placeholder="过滤日志关键字..." />
+              <label class="toggle">
+                <input type="checkbox" id="chk-auto-log" checked />
+                <span>自动刷新</span>
+              </label>
+              <button class="btn btn-sm btn-ghost" id="btn-refresh-log">刷新</button>
+              <button class="btn btn-sm btn-ghost" id="btn-clear-log">清空</button>
+            </div>
+          </div>
+          <div class="log-terminal" id="log-content">正在读取日志...</div>
+        </div>
+      </section>
+
+      <!-- 2. 作答与错题 -->
+      <section class="tab-panel" id="tab-history">
+        <header class="panel-header">
+          <div>
+            <h1>作答记录与错题</h1>
+            <p class="muted">支持按来源筛选、搜索题目、查看完整选项并一键修正入库</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-ghost" id="btn-import-csv">导入 CSV</button>
+            <button class="btn btn-ghost" id="btn-export-history">导出历史 CSV</button>
+            <button class="btn btn-ghost" id="btn-export-errors">导出错题 CSV</button>
+            <button class="btn btn-primary" id="btn-refresh-history">刷新</button>
+          </div>
+        </header>
+
+        <div class="toolbar">
+          <div class="segmented" id="history-filter-seg">
+            <button class="seg-btn active" data-filter="all">全部</button>
+            <button class="seg-btn" data-filter="error">仅失败</button>
+            <button class="seg-btn" data-filter="hit">本地/缓存</button>
+            <button class="seg-btn" data-filter="ai">模型/题库</button>
+          </div>
+          <input type="text" class="input search-input" id="history-search" placeholder="搜索题目、答案或报错信息..." />
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:92px">时间</th>
+                <th style="width:82px">来源</th>
+                <th style="width:68px">题型</th>
+                <th>题目与选项</th>
+                <th style="width:120px">答案</th>
+                <th style="width:220px">解析 / 错误</th>
+                <th style="width:128px">操作</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. 模型与配置 -->
+      <section class="tab-panel" id="tab-settings">
+        <header class="panel-header">
+          <div>
+            <h1>模型与服务配置 (.env)</h1>
+            <p class="muted">图形化管理服务参数，保存后重启 AI 服务即可生效</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-ghost" id="btn-save-env">仅保存配置</button>
+            <button class="btn btn-primary" id="btn-save-restart">保存并重启服务</button>
+          </div>
+        </header>
+
+        <form class="settings-sections" id="env-form">
+          <div class="card settings-group">
+            <h3 class="group-title">API 连接配置</h3>
+            <div class="settings-grid">
+              <label class="field">
+                <span>API Base URL</span>
+                <input type="text" name="OPENAI_BASE_URL" placeholder="https://api.deepseek.com" />
+              </label>
+              <label class="field">
+                <span>API Key</span>
+                <div class="input-with-btn">
+                  <input type="password" name="OPENAI_API_KEY" id="input-api-key" placeholder="sk-..." />
+                  <button type="button" class="btn btn-sm btn-ghost" id="btn-toggle-key">显示</button>
+                </div>
+              </label>
+              <label class="field">
+                <span>默认模型 (OPENAI_MODEL)</span>
+                <input type="text" name="OPENAI_MODEL" placeholder="deepseek-flash" />
+              </label>
+              <label class="field">
+                <span>多选题专用模型 (OPENAI_MODEL_HARD)</span>
+                <input type="text" name="OPENAI_MODEL_HARD" placeholder="留空则跟随默认模型" />
+              </label>
+            </div>
+          </div>
+
+          <div class="card settings-group">
+            <h3 class="group-title">思考与采样策略</h3>
+            <div class="settings-grid">
+              <label class="field">
+                <span>思考档位 (OPENAI_THINKING)</span>
+                <select name="OPENAI_THINKING">
+                  <option value="auto">auto（自动升档）</option>
+                  <option value="low">low（低思考）</option>
+                  <option value="medium">medium（中思考）</option>
+                  <option value="high">high（高思考）</option>
+                  <option value="disabled">disabled（关闭思考）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>默认采样次数 (OPENAI_SAMPLES)</span>
+                <input type="number" name="OPENAI_SAMPLES" min="1" max="5" />
+              </label>
+              <label class="field">
+                <span>单选/判断采样次数 (OPENAI_SAMPLES_SINGLE)</span>
+                <input type="number" name="OPENAI_SAMPLES_SINGLE" min="1" max="5" placeholder="留空则跟随默认" />
+              </label>
+              <label class="field">
+                <span>最大输出 Token (OPENAI_MAX_TOKENS)</span>
+                <input type="number" name="OPENAI_MAX_TOKENS" min="512" max="8192" step="512" />
+              </label>
+            </div>
+          </div>
+
+          <div class="card settings-group">
+            <h3 class="group-title">题库仲裁与高级功能</h3>
+            <div class="settings-grid">
+              <label class="field">
+                <span>远程题库源 (BANK_USE)</span>
+                <input type="text" name="BANK_USE" placeholder="buguake" />
+              </label>
+              <label class="field">
+                <span>服务并发线程数 (THREADS)</span>
+                <input type="number" name="THREADS" min="4" max="64" placeholder="16" />
+              </label>
+              <label class="field">
+                <span>上游题库超时秒数 (BANK_TIMEOUT)</span>
+                <input type="number" name="BANK_TIMEOUT" min="1" max="10" step="0.5" placeholder="2" />
+              </label>
+              <label class="field">
+                <span>题库仲裁策略 (ARBITER)</span>
+                <select name="ARBITER">
+                  <option value="direct">direct（命中直接采信，极速推荐）</option>
+                  <option value="agree">agree（命中后 AI 复核 1 次）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>启用上游题库 (BANK_FIRST)</span>
+                <select name="BANK_FIRST">
+                  <option value="1">1（开启）</option>
+                  <option value="0">0（关闭）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>分歧时联网检索 (SEARCH_FALLBACK)</span>
+                <select name="SEARCH_FALLBACK">
+                  <option value="1">1（开启）</option>
+                  <option value="0">0（关闭）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>字体反爬 AI 清洗 (TEXT_NORMALIZE)</span>
+                <select name="TEXT_NORMALIZE">
+                  <option value="1">1（开启）</option>
+                  <option value="0">0（关闭）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>多模态图片直传 (OPENAI_VISION)</span>
+                <select name="OPENAI_VISION">
+                  <option value="0">0（关闭）</option>
+                  <option value="1">1（开启，需视觉模型）</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>视觉模型名称 (OPENAI_VISION_MODEL)</span>
+                <input type="text" name="OPENAI_VISION_MODEL" placeholder="留空则使用默认模型" />
+              </label>
+              <label class="field">
+                <span>服务监听地址 (BIND_HOST)</span>
+                <input type="text" name="BIND_HOST" placeholder="127.0.0.1" />
+              </label>
+              <label class="field">
+                <span>输入单价 (元 / 百万 Token)</span>
+                <input type="number" name="PRICE_INPUT_PER_M" min="0" step="0.1" placeholder="2.0" />
+              </label>
+              <label class="field">
+                <span>输出单价 (元 / 百万 Token)</span>
+                <input type="number" name="PRICE_OUTPUT_PER_M" min="0" step="0.1" placeholder="8.0" />
+              </label>
+              <label class="field">
+                <span>API 超时秒数 (OPENAI_TIMEOUT_SECONDS)</span>
+                <input type="number" name="OPENAI_TIMEOUT_SECONDS" min="10" max="120" />
+              </label>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- 5. OCS 接入与快捷工具 -->
+      <section class="tab-panel" id="tab-ocs">
+        <header class="panel-header">
+          <div>
+            <h1>OCS 网课助手接入与快捷入口</h1>
+            <p class="muted">将下方 JSON 粘贴到 OCS「全局设置 → 题库配置」即可开始使用</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" id="btn-copy-ocs">一键复制配置</button>
+          </div>
+        </header>
+
+        <div class="quick-links">
+          <button class="card quick-card" id="btn-open-folder">
+            <div class="icon-badge badge-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <div class="quick-title">打开项目文件夹</div>
+              <div class="muted">在文件管理器中浏览 AI刷题 目录</div>
+            </div>
+          </button>
+          <button class="card quick-card" id="btn-open-tiku">
+            <div class="icon-badge badge-violet">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div>
+              <div class="quick-title">打开 tikuAdapter 后台</div>
+              <div class="muted">浏览器访问 http://127.0.0.1:8060</div>
+            </div>
+          </button>
+          <button class="card quick-card" id="btn-open-recent">
+            <div class="icon-badge badge-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div>
+              <div class="quick-title">查看 JSON 作答接口</div>
+              <div class="muted">浏览器访问 http://127.0.0.1:5000/recent</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="card code-card">
+          <div class="code-card-head">
+            <span class="section-title">ai-server/ocs_config.json</span>
+          </div>
+          <pre class="code-pre" id="ocs-json-preview">加载中...</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 新增 / 修正题库弹窗 -->
+  <div class="modal-backdrop hidden" id="fix-modal">
+    <div class="modal">
+      <h3 id="fix-modal-heading">修正答案并写入本地题库</h3>
+      <label class="field">
+        <span>题目</span>
+        <textarea id="fix-title-input" rows="3" placeholder="输入完整题干"></textarea>
+      </label>
+      <label class="field">
+        <span>选项（每行一个，如 A. 内容）</span>
+        <textarea id="fix-options-input" rows="4" placeholder="A. 选项一&#10;B. 选项二"></textarea>
+      </label>
+      <div class="modal-row">
+        <label class="field" style="width:130px">
+          <span>题型</span>
+          <select id="fix-type-input">
+            <option value="single">单选题</option>
+            <option value="multiple">多选题</option>
+            <option value="judgement">判断题</option>
+            <option value="completion">填空题</option>
+          </select>
+        </label>
+        <label class="field" style="flex:1">
+          <span>正确答案文本（多个用 # 分隔）</span>
+          <input type="text" id="fix-answer-text" placeholder="直接填选项正文或 对/错" />
+        </label>
+      </div>
+      <label class="field">
+        <span>解析（可选）</span>
+        <input type="text" id="fix-analysis" placeholder="简要说明原因" />
+      </label>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="btn-fix-cancel">取消</button>
+        <button class="btn btn-primary" id="btn-fix-save">保存到本地题库</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

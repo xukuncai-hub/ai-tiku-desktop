@@ -1,0 +1,21 @@
+[package]
+name = "ai-tiku-desktop"
+version = "0.1.0"
+description = "AI 题库本地桌面客户端"
+edition = "2021"
+
+[lib]
+name = "ai_tiku_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+sha2 = "0.10"
+chrono = "0.4"

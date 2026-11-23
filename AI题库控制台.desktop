@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AI 题库控制台
+Comment=AI 刷题服务桌面管理客户端（Rust + Tauri）
+Exec=/home/song/桌面/AI刷题/desktop/src-tauri/target/release/ai-tiku-desktop
+Icon=/home/song/桌面/AI刷题/desktop/src-tauri/icons/icon.png
+Terminal=false
+Categories=Utility;
